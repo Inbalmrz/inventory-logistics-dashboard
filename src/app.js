@@ -1,4 +1,4 @@
-// App shell: routing, global filters, refresh, and the drill-down dialog.
+// App shell: routing, global filters, and the drill-down dialog.
 (function (App) {
   const { esc, fmt } = App;
   const NAV = [
@@ -14,7 +14,7 @@
   // To plug in a real source, register an adapter in App.sources and change this one line.
   const source = App.sources.demo();
 
-  const state = { model: null, filters: {}, timer: null };
+  const state = { model: null, filters: {} };
   const el = (id) => document.getElementById(id);
 
   function currentRoute() {
@@ -97,27 +97,6 @@
     });
   }
 
-  async function refresh() {
-    const btn = el('btn-refresh');
-    btn.disabled = true;
-    try {
-      const data = await source.refresh();
-      state.model = App.metrics.buildModel(data);
-      if (!el('drill').open) render();
-    } finally {
-      btn.disabled = false;
-    }
-  }
-
-  function initRefresh() {
-    el('btn-refresh').addEventListener('click', refresh);
-    el('auto-refresh').addEventListener('change', (e) => {
-      clearInterval(state.timer);
-      const minutes = +e.target.value;
-      if (minutes) state.timer = setInterval(refresh, minutes * 60000);
-    });
-  }
-
   App.ui.drill = (title, columns, rows, sort) => {
     el('drill-title').textContent = `${title} (${fmt.num(rows.length)})`;
     App.ui.table(el('drill-body'), { columns, rows, sort, fileName: title });
@@ -131,7 +110,6 @@
     source.load().then((data) => {
       state.model = App.metrics.buildModel(data);
       initFilters();
-      initRefresh();
       el('drill-close').addEventListener('click', closeDrill);
       el('drill').addEventListener('click', (e) => { if (e.target === el('drill')) closeDrill(); });
       window.addEventListener('hashchange', () => { closeDrill(); render(); });

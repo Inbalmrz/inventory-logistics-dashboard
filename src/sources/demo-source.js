@@ -1,8 +1,7 @@
 // Demo data source: invented data from a seeded simulation. Nothing here describes a real business.
 //
-// Source contract (a future API/ERP/Kaggle adapter implements the same two methods):
-//   load()    -> Promise<Dataset>   first load
-//   refresh() -> Promise<Dataset>   fetch whatever is new
+// Source contract (a future API/ERP/DWH adapter implements the same method):
+//   load() -> Promise<Dataset>
 // Dataset: { meta, warehouses, categories, suppliers, items, stock, movements, purchaseOrders }
 (function (App) {
   function rngFrom(seed) {
@@ -179,32 +178,9 @@
   }
 
   function createDemoSource({ seed = 20261105, asOf = App.todayStr() } = {}) {
-    let dataset = null;
-    let refreshRng = rngFrom(seed + 1);
-    let soNo = 900001, moveNo = 900001;
     return {
       id: 'demo',
-      load() {
-        dataset = buildDataset(seed, asOf);
-        return Promise.resolve(dataset);
-      },
-      // Simulates new activity arriving: a few new outbound movements dated today.
-      // Reloading the page returns to the base dataset.
-      refresh() {
-        const candidates = dataset.stock.filter((s) => s.qty > 0);
-        const count = 5 + Math.floor(refreshRng() * 11);
-        for (let i = 0; i < count && candidates.length; i++) {
-          const s = candidates[Math.floor(refreshRng() * candidates.length)];
-          const q = Math.min(s.qty, 1 + Math.floor(refreshRng() * 8));
-          if (q <= 0) continue;
-          s.qty -= q;
-          dataset.movements.push({
-            id: 'M-' + moveNo++, date: dataset.meta.asOf, sku: s.sku, wh: s.wh, type: 'OUT', qty: q, ref: 'SO-' + soNo++,
-          });
-        }
-        dataset.meta.lastUpdated = new Date().toISOString();
-        return Promise.resolve(dataset);
-      },
+      load: () => Promise.resolve(buildDataset(seed, asOf)),
     };
   }
 

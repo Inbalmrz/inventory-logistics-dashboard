@@ -40,15 +40,12 @@ button, input, select { font: inherit; color: inherit; }
 .demo-banner { margin: 0 -22px 14px; padding: 8px 22px; background: var(--warn-bg); color: #6d4a05; border-bottom: 1px solid #efd9a3; font-size: 14px; }
 .topbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 18px; margin-bottom: 12px; }
 h1 { font-size: 24px; }
-.refresh { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; font-size: 14px; color: var(--muted); }
-.refresh label { display: flex; align-items: center; gap: 6px; }
+.updated { font-size: 14px; color: var(--muted); }
 .updated b { color: var(--text); font-weight: 600; }
 
 .btn { min-height: 38px; padding: 6px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); cursor: pointer; white-space: nowrap; }
 .btn:hover:not(:disabled) { background: #eef2f7; }
 .btn:disabled { opacity: .5; cursor: default; }
-.btn-primary { background: var(--brand); border-color: var(--brand); color: #fff; }
-.btn-primary:hover:not(:disabled) { background: #194f8c; }
 select, input[type=date], input[type=search], input:not([type]) { min-height: 38px; padding: 6px 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); max-width: 100%; }
 
 .filters { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px 12px; padding: 12px 14px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }

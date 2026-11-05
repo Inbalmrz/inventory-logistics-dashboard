@@ -421,7 +421,7 @@
         <section class="panel wide"><header><h2>מקור הנתונים</h2></header><div class="panel-body prose">
           <p><b>כל הנתונים במערכת הומצאו.</b> הם נוצרים בהדמיה עם מחולל מספרים קבוע (זרע ${esc(model.data.meta.seed)}), ולא מתארים עסק, ספק, מחסן או מוצר אמיתיים.</p>
           <p>תקופת ההיסטוריה: ${esc(fmt.date(model.data.meta.historyStart))} עד ${esc(fmt.date(model.data.meta.asOf))}. ${esc(fmt.num(model.data.items.length))} פריטים, ${esc(fmt.num(model.data.movements.length))} תנועות, ${esc(fmt.num(model.data.purchaseOrders.length))} הזמנות רכש.</p>
-          <p>רענון מוסיף תנועות יציאה מומצאות של היום. טעינה מחדש של העמוד מחזירה לנתוני הבסיס.</p>
+          <p>נתוני ההדגמה נוצרים בכל פתיחה של העמוד. אין במסך כפתורי רענון.</p>
           <p>מלאי והזמנות פתוחות מוצגים נכון להיום. טווח התאריכים משפיע רק על תנועות ועל הזמנות שהתקבלו.</p>
         </div></section>
         <section class="panel wide"><header><h2>בדיקות התאמה</h2><p>${failed ? `${fmt.num(failed)} בדיקות נכשלו` : `כל ${fmt.num(checks.length)} הבדיקות עברו`}</p></header><div class="panel-body" id="p-checks"></div></section>
