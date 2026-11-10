@@ -14,7 +14,7 @@
     </aside>
 
     <div class="main">
-      <div class="demo-banner" role="note"><b>נתוני הדגמה:</b> כל המספרים, הפריטים, המחסנים והספקים הומצאו, ואינם נתוני אמת.</div>
+      <div class="demo-banner" id="demo-banner" role="note"><b>נתוני הדגמה:</b> כל המספרים, הפריטים, המחסנים והספקים הומצאו, ואינם נתוני אמת. <span id="source-note"></span></div>
 
       <header class="topbar">
         <h1 id="screen-title"></h1>
@@ -45,6 +45,18 @@
     </div>
   </div>
 
+  <dialog id="connect" aria-labelledby="connect-title">
+    <form id="connect-form" method="dialog">
+      <h2 id="connect-title">חיבור ל-Airtable</h2>
+      <p id="connect-msg"></p>
+      <label>Personal access token
+        <input id="connect-token" type="password" autocomplete="off" placeholder="pat..." dir="ltr" required>
+      </label>
+      <p class="hint">הטוקן נשמר בדפדפן הזה עד לסגירת הלשונית, ולא נשלח לשום מקום חוץ מ-Airtable.</p>
+      <button type="submit" class="btn primary">התחברות</button>
+    </form>
+  </dialog>
+
   <dialog id="drill" aria-labelledby="drill-title">
     <header class="drill-head">
       <h2 id="drill-title"></h2>
@@ -53,8 +65,11 @@
     <div id="drill-body"></div>
   </dialog>
 
+  <script src="config.js"></script>
+  <script src="config.local.js" onerror="this.remove()"></script>
   <script src="src/core.js"></script>
   <script src="src/sources/demo-source.js"></script>
+  <script src="src/sources/airtable-source.js"></script>
   <script src="src/forecast.js"></script>
   <script src="src/metrics.js"></script>
   <script src="src/reconcile.js"></script>

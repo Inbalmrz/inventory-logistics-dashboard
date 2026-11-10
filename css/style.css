@@ -162,3 +162,11 @@ dialog::backdrop { background: rgba(15, 25, 40, .5); }
   .donut-legend { width: 100%; }
   .hbar { grid-template-columns: minmax(0, 104px) minmax(0, 1fr) 66px; }
 }
+
+.loading { padding: 40px 0; text-align: center; color: var(--muted, #5b6675); }
+.load-error { max-width: 640px; margin: 24px 0; padding: 16px 18px; border: 1px solid #e3b4b4; border-radius: 10px; background: #fdf1f1; color: #7a1f1f; }
+#connect { width: min(460px, calc(100vw - 32px)); }
+#connect label { display: block; margin: 12px 0 6px; font-weight: 600; }
+#connect input { width: 100%; box-sizing: border-box; padding: 8px 10px; }
+#connect .hint { font-size: 13px; color: #5b6675; }
+.btn.primary { background: #1f4e8c; color: #fff; border-color: #1f4e8c; }

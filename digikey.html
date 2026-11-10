@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>מלאי ולוגיסטיקה – Digi-Key</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="side">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">▣</span><span class="brand-text">מלאי ולוגיסטיקה · Digi-Key</span></div>
+      <nav id="nav" aria-label="ניווט ראשי"></nav>
+    </aside>
+
+    <div class="main">
+      <div class="demo-banner" id="demo-banner" role="note"><b>נתוני הדגמה:</b> כל המספרים, הפריטים, המחסנים והספקים הומצאו, ואינם נתוני אמת. <span id="source-note"></span></div>
+
+      <header class="topbar">
+        <h1 id="screen-title"></h1>
+        <span class="updated">עדכון אחרון: <b id="last-update">—</b></span>
+      </header>
+
+      <form class="filters" aria-label="פילטרים" onsubmit="return false">
+        <label>תקופה
+          <select id="f-preset">
+            <option value="">מותאם</option>
+            <option value="30">30 ימים</option>
+            <option value="90">90 ימים</option>
+            <option value="180">180 ימים</option>
+            <option value="365" selected>שנה</option>
+          </select>
+        </label>
+        <label>מתאריך <input type="date" id="f-from"></label>
+        <label>עד תאריך <input type="date" id="f-to"></label>
+        <label>מחסן <select id="f-wh"><option value="">הכול</option></select></label>
+        <label>קטגוריה <select id="f-category"><option value="">הכול</option></select></label>
+        <label>ספק <select id="f-supplier"><option value="">הכול</option></select></label>
+        <label class="grow">פריט <input id="f-item" list="f-items" placeholder="מק״ט או שם"><datalist id="f-items"></datalist></label>
+        <button type="button" class="btn" id="f-clear">ניקוי</button>
+      </form>
+      <p class="filter-note">מלאי והזמנות פתוחות מוצגים נכון להיום. טווח התאריכים חל על תנועות ועל הזמנות שהתקבלו.</p>
+
+      <main id="view"></main>
+    </div>
+  </div>
+
+  <dialog id="connect" aria-labelledby="connect-title">
+    <form id="connect-form" method="dialog">
+      <h2 id="connect-title">חיבור ל-Airtable</h2>
+      <p id="connect-msg"></p>
+      <label>Personal access token
+        <input id="connect-token" type="password" autocomplete="off" placeholder="pat..." dir="ltr" required>
+      </label>
+      <p class="hint">הטוקן נשמר בדפדפן הזה עד לסגירת הלשונית, ולא נשלח לשום מקום חוץ מ-Airtable.</p>
+      <button type="submit" class="btn primary">התחברות</button>
+    </form>
+  </dialog>
+
+  <dialog id="drill" aria-labelledby="drill-title">
+    <header class="drill-head">
+      <h2 id="drill-title"></h2>
+      <button type="button" class="btn" id="drill-close">סגירה</button>
+    </header>
+    <div id="drill-body"></div>
+  </dialog>
+
+  <script src="config.digikey.js"></script>
+  <script src="config.local.js" onerror="this.remove()"></script>
+  <script src="src/core.js"></script>
+  <script src="src/sources/demo-source.js"></script>
+  <script src="src/sources/airtable-source.js"></script>
+  <script src="src/forecast.js"></script>
+  <script src="src/metrics.js"></script>
+  <script src="src/reconcile.js"></script>
+  <script src="src/ui/xlsx.js"></script>
+  <script src="src/ui/charts.js"></script>
+  <script src="src/ui/table.js"></script>
+  <script src="src/ui/screens.js"></script>
+  <script src="src/app.js"></script>
+</body>
+</html>

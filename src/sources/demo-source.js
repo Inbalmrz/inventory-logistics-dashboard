@@ -49,19 +49,26 @@
 
   const HISTORY_DAYS = 365;
 
-  function buildDataset(seed, asOf) {
+  function buildDataset(seed, asOf, opts = {}) {
+    const historyDays = opts.historyDays || HISTORY_DAYS;
+    const perCat = opts.itemsPerCategory || Infinity;
+    // opts.realItems / opts.suppliers: a real catalog (e.g. from Digi-Key) replaces the invented one;
+    // stock, movements and purchase orders are still simulated around it.
+    const SUPS = opts.suppliers || SUPPLIERS;
     const rng = rngFrom(seed);
     const rand = (a, b) => a + rng() * (b - a);
     const randInt = (a, b) => Math.floor(rand(a, b + 1));
     const asOfDay = App.dayNum(asOf);
-    const startDay = asOfDay - HISTORY_DAYS + 1;
+    const startDay = asOfDay - historyDays + 1;
 
-    const items = [];
+    const items = opts.realItems ? opts.realItems.map((i) => ({ ...i })) : [];
     let skuNo = 1001;
-    CATALOG.forEach((cat, c) => {
-      const pool = [SUPPLIERS[c % 10], SUPPLIERS[(c + 3) % 10], SUPPLIERS[(c + 7) % 10]];
+    (opts.realItems ? [] : CATALOG).forEach((cat, c) => {
+      const pool = [SUPS[c % SUPS.length], SUPS[(c + 3) % SUPS.length], SUPS[(c + 7) % SUPS.length]];
+      let made = 0;
       for (const base of cat.items) {
         for (const spec of cat.specs) {
+          if (made++ >= perCat) break;
           const supplier = pool[randInt(0, 2)];
           items.push({
             sku: 'SKU-' + skuNo++,
@@ -77,7 +84,7 @@
     // One simulation record per item+warehouse pair.
     const pairs = [];
     for (const item of items) {
-      const supplier = SUPPLIERS.find((s) => s.id === item.supplierId);
+      const supplier = SUPS.find((s) => s.id === item.supplierId);
       const shuffled = WAREHOUSES.slice().sort(() => rng() - 0.5);
       for (const wh of shuffled.slice(0, randInt(1, 4))) {
         const pOut = rand(0.08, 0.3);
@@ -106,7 +113,7 @@
 
     for (let day = startDay; day <= asOfDay; day++) {
       const isSaturday = new Date(day * 86400000).getUTCDay() === 6;
-      const season = 1 + 0.25 * Math.sin(((day - startDay) / 365) * 2 * Math.PI);
+      const season = 1 + 0.25 * Math.sin(((day - startDay) / historyDays) * 2 * Math.PI);
       for (const p of pairs) {
         for (let i = p.pending.length - 1; i >= 0; i--) {
           const { po, receiveDay } = p.pending[i];
@@ -171,16 +178,16 @@
         historyStart: App.dayStr(startDay), lastUpdated: new Date().toISOString(),
       },
       warehouses,
-      categories: CATALOG.map((c) => c.name),
-      suppliers: SUPPLIERS.map((s) => ({ id: s.id, name: s.name, plannedLeadDays: s.lead })),
+      categories: opts.realItems ? [...new Set(items.map((i) => i.category))] : CATALOG.map((c) => c.name),
+      suppliers: SUPS.map((s) => ({ id: s.id, name: s.name, plannedLeadDays: s.lead })),
       items, stock, movements, purchaseOrders,
     };
   }
 
-  function createDemoSource({ seed = 20261105, asOf = App.todayStr() } = {}) {
+  function createDemoSource({ seed = 20261105, asOf = App.todayStr(), ...opts } = {}) {
     return {
       id: 'demo',
-      load: () => Promise.resolve(buildDataset(seed, asOf)),
+      load: () => Promise.resolve(buildDataset(seed, asOf, opts)),
     };
   }
 

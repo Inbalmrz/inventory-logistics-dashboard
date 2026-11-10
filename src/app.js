@@ -11,8 +11,25 @@
     ['method', 'נוסחאות ובדיקות', '✓'],
   ];
 
-  // To plug in a real source, register an adapter in App.sources and change this one line.
-  const source = App.sources.demo();
+  // The data source is chosen in config.js: 'airtable' (default) or 'demo' (invented data generated in the browser).
+  const cfg = window.APP_CONFIG || { source: 'demo' };
+  const TOKEN_KEY = 'airtable-token';
+  const getToken = () => {
+    try { return sessionStorage.getItem(TOKEN_KEY) || ''; } catch (e) { return ''; }
+  };
+  const saveToken = (t) => {
+    try { sessionStorage.setItem(TOKEN_KEY, t); } catch (e) { /* the token then lasts for this page only */ }
+  };
+  function makeSource(token) {
+    if (cfg.source === 'airtable') {
+      return App.sources.airtable({
+        baseId: cfg.airtable.baseId,
+        token,
+        onProgress: (t) => { el('view').innerHTML = `<p class="loading">טוען מ-Airtable: ${esc(t)}…</p>`; },
+      });
+    }
+    return App.sources.demo();
+  }
 
   const state = { model: null, filters: {} };
   const el = (id) => document.getElementById(id);
@@ -106,15 +123,50 @@
     if (el('drill').open) el('drill').close();
   }
 
+  function askToken(message) {
+    return new Promise((resolve) => {
+      const dlg = el('connect');
+      el('connect-msg').textContent = message;
+      el('connect-token').value = '';
+      dlg.addEventListener('cancel', (e) => e.preventDefault(), { once: true });
+      el('connect-form').addEventListener('submit', () => resolve(el('connect-token').value.trim()), { once: true });
+      dlg.showModal();
+    });
+  }
+
+  function showError(message) {
+    el('screen-title').textContent = 'שגיאה בטעינת הנתונים';
+    el('view').innerHTML = `<div class="load-error" role="alert"><p><b>לא ניתן לטעון את הנתונים.</b></p><p>${esc(message)}</p><p>פתחו את הדף מחדש כדי לנסות שוב.</p></div>`;
+  }
+
+  async function loadData() {
+    let token = cfg.source === 'airtable' ? (cfg.airtable.token || getToken()) : '';
+    if (cfg.source === 'airtable' && !token) token = await askToken('הדאשבורד קורא את הנתונים מ-Airtable. הדביקו טוקן עם הרשאת קריאה (data.records:read) ל-base.');
+    for (;;) {
+      try {
+        const data = await makeSource(token).load();
+        if (cfg.source === 'airtable') saveToken(token);
+        return data;
+      } catch (e) {
+        if (cfg.source === 'airtable' && /טוקן/.test(e.message)) {
+          token = await askToken(e.message + '. הדביקו טוקן תקין.');
+        } else throw e;
+      }
+    }
+  }
+
   function init() {
-    source.load().then((data) => {
+    el('view').innerHTML = '<p class="loading">טוען נתונים…</p>';
+    loadData().then((data) => {
       state.model = App.metrics.buildModel(data);
+      if (data.meta.note) el('demo-banner').innerHTML = `<b>מקור הנתונים:</b> ${esc(data.meta.note)}`;
+      if (el('source-note')) el('source-note').textContent = data.meta.source === 'airtable' ? 'מקור הנתונים: Airtable.' : 'מקור הנתונים: יצירה מקומית בדפדפן.';
       initFilters();
       el('drill-close').addEventListener('click', closeDrill);
       el('drill').addEventListener('click', (e) => { if (e.target === el('drill')) closeDrill(); });
       window.addEventListener('hashchange', () => { closeDrill(); render(); });
       render();
-    });
+    }).catch((e) => showError(e.message));
   }
 
   document.addEventListener('DOMContentLoaded', init);
