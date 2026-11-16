@@ -159,8 +159,6 @@
     el('view').innerHTML = '<p class="loading">טוען נתונים…</p>';
     loadData().then((data) => {
       state.model = App.metrics.buildModel(data);
-      if (data.meta.note) el('demo-banner').innerHTML = `<b>מקור הנתונים:</b> ${esc(data.meta.note)}`;
-      if (el('source-note')) el('source-note').textContent = data.meta.source === 'airtable' ? 'מקור הנתונים: Airtable.' : 'מקור הנתונים: יצירה מקומית בדפדפן.';
       initFilters();
       el('drill-close').addEventListener('click', closeDrill);
       el('drill').addEventListener('click', (e) => { if (e.target === el('drill')) closeDrill(); });
