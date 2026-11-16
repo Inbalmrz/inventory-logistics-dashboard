@@ -5,6 +5,7 @@ window.App = { sources: {}, ui: {} };
   const DAY_MS = 86400000;
   const nf = new Intl.NumberFormat('he-IL', { maximumFractionDigits: 0 });
   const nf1 = new Intl.NumberFormat('he-IL', { maximumFractionDigits: 1 });
+  const nf2 = new Intl.NumberFormat('he-IL', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
   App.dayNum = (s) => {
     const [y, m, d] = s.split('-').map(Number);
@@ -16,16 +17,23 @@ window.App = { sources: {}, ui: {} };
     return App.dayStr(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / DAY_MS);
   };
 
+  // Currency of the loaded dataset. Set once by app.js from meta.currency: 'ILS' (demo data) or 'USD' (Digi-Key catalog).
+  App.currency = { code: 'ILS', symbol: '₪' };
+  App.setCurrency = (code) => { App.currency = code === 'USD' ? { code: 'USD', symbol: '$' } : { code: 'ILS', symbol: '₪' }; };
+  const cur = () => App.currency.symbol;
+
   App.fmt = {
     num: (v) => (v == null || Number.isNaN(v) ? '—' : nf.format(v)),
     num1: (v) => (v == null || Number.isNaN(v) ? '—' : nf1.format(v)),
-    money: (v) => (v == null || Number.isNaN(v) ? '—' : '₪' + nf.format(v)),
+    money: (v) => (v == null || Number.isNaN(v) ? '—' : cur() + nf.format(v)),
+    // Unit prices keep two decimals: a part that costs 0.10 must not show as 0.
+    price: (v) => (v == null || Number.isNaN(v) ? '—' : cur() + nf2.format(v)),
     moneyShort: (v) => {
       if (v == null || Number.isNaN(v)) return '—';
       const a = Math.abs(v);
-      if (a >= 1e6) return '₪' + nf1.format(v / 1e6) + 'M';
-      if (a >= 1e3) return '₪' + nf.format(v / 1e3) + 'K';
-      return '₪' + nf.format(v);
+      if (a >= 1e6) return cur() + nf1.format(v / 1e6) + 'M';
+      if (a >= 1e3) return cur() + nf.format(v / 1e3) + 'K';
+      return cur() + nf.format(v);
     },
     pct: (v) => (v == null || Number.isNaN(v) ? '—' : nf1.format(v) + '%'),
     date: (s) => (s ? s.split('-').reverse().join('/') : '—'),

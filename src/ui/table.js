@@ -1,5 +1,5 @@
 // Data table with search, sorting, per-column filters, paging and Excel export.
-// Column: { key, label, type: 'text'|'num'|'num1'|'money'|'pct'|'date'|'tone', filter?, meta?, value? }
+// Column: { key, label, type: 'text'|'num'|'num1'|'money'|'price'|'pct'|'date'|'tone', filter?, meta?, value? }
 (function (App) {
   const { esc, fmt } = App;
   const collator = new Intl.Collator('he', { numeric: true });
@@ -19,6 +19,7 @@
       case 'num': return esc(fmt.num(v));
       case 'num1': return esc(fmt.num1(v));
       case 'money': return esc(fmt.money(v));
+      case 'price': return esc(fmt.price(v));
       case 'pct': return esc(fmt.pct(v));
       case 'date': return esc(fmt.date(v));
       case 'tone': {
@@ -119,7 +120,7 @@
   }
 
   function isNumeric(c) {
-    return ['num', 'num1', 'money', 'pct'].includes(c.type);
+    return ['num', 'num1', 'money', 'price', 'pct'].includes(c.type);
   }
 
   App.ui.table = render;

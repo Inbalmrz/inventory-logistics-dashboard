@@ -23,7 +23,7 @@
 
     const rawValue = data.stock.reduce((t, s) => t + s.qty * costOf.get(s.sku), 0);
     const view = App.metrics.applyFilters(model, {});
-    add('שווי המלאי בדאשבורד = חישוב ישיר מהמקור', rawValue, App.metrics.kpis(view).totalValue, 'בלי פילטרים, ב-₪');
+    add('שווי המלאי בדאשבורד = חישוב ישיר מהמקור', rawValue, App.metrics.kpis(view).totalValue, 'בלי פילטרים, ב-' + App.currency.symbol);
 
     const rawUnits = data.stock.reduce((t, s) => t + s.qty, 0);
     add('כמות היחידות בדאשבורד = סכום המקור', rawUnits, App.metrics.kpis(view).totalUnits, 'יחידות');
