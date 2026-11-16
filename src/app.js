@@ -158,7 +158,6 @@
   function init() {
     el('view').innerHTML = '<p class="loading">טוען נתונים…</p>';
     loadData().then((data) => {
-      App.setCurrency(data.meta.currency);
       state.model = App.metrics.buildModel(data);
       if (data.meta.note) el('demo-banner').innerHTML = `<b>מקור הנתונים:</b> ${esc(data.meta.note)}`;
       if (el('source-note')) el('source-note').textContent = data.meta.source === 'airtable' ? 'מקור הנתונים: Airtable.' : 'מקור הנתונים: יצירה מקומית בדפדפן.';

@@ -2,7 +2,7 @@
 // Same contract as the demo source: load() -> Promise<Dataset>.
 //
 // Tables (names are fixed, see tools/seed-airtable.js): warehouses, suppliers, items, stock,
-// movements, purchaseOrders, meta (key/value rows: asOf, historyStart, lastUpdated, label, seed, isDemo, currency).
+// movements, purchaseOrders, meta (key/value rows: asOf, historyStart, lastUpdated, label, seed, isDemo).
 (function (App) {
   const API = 'https://api.airtable.com/v0';
   const PAGE_DELAY_MS = 230; // Airtable allows 5 requests per second per base
@@ -70,8 +70,6 @@
             source: 'airtable',
             label: m.label || 'נתונים מ-Airtable',
             isDemo: m.isDemo !== 'false',
-            // Digi-Key prices are loaded as-is, in USD. Bases loaded before the currency row existed are recognised by their profile.
-            currency: m.currency || (m.profile === 'digikey' ? 'USD' : 'ILS'),
             note: m.note || '',
             seed: m.seed ? Number(m.seed) : null,
             asOf: m.asOf,

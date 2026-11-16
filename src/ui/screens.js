@@ -420,8 +420,8 @@
       root.innerHTML = `<div class="grid">
         <section class="panel wide"><header><h2>מקור הנתונים</h2></header><div class="panel-body prose">
           ${model.data.meta.note
-            ? `<p><b>מקור הנתונים:</b> ${esc(model.data.meta.note)}</p><p>מטבע התצוגה: ${model.data.meta.currency === 'USD' ? 'דולר ארה״ב ($), בלי המרה' : 'שקל (₪)'}.</p>`
-            : `<p><b>כל הנתונים במערכת הומצאו.</b> הם נוצרים בהדמיה עם מחולל מספרים קבוע (זרע ${esc(model.data.meta.seed)}), ולא מתארים עסק, ספק, מחסן או מוצר אמיתיים.</p>`}
+            ? `<p><b>מקור הנתונים:</b> ${esc(model.data.meta.note)}</p><p>כל הסכומים בדולר ארה״ב ($).</p>`
+            : `<p><b>כל הנתונים במערכת הומצאו.</b> הם נוצרים בהדמיה עם מחולל מספרים קבוע (זרע ${esc(model.data.meta.seed)}), ולא מתארים עסק, ספק, מחסן או מוצר אמיתיים. כל הסכומים בדולר ארה״ב ($).</p>`}
           <p>תקופת ההיסטוריה: ${esc(fmt.date(model.data.meta.historyStart))} עד ${esc(fmt.date(model.data.meta.asOf))}. ${esc(fmt.num(model.data.items.length))} פריטים, ${esc(fmt.num(model.data.movements.length))} תנועות, ${esc(fmt.num(model.data.purchaseOrders.length))} הזמנות רכש.</p>
           <p>נתוני ההדגמה נוצרים בכל פתיחה של העמוד. אין במסך כפתורי רענון.</p>
           <p>מלאי והזמנות פתוחות מוצגים נכון להיום. טווח התאריכים משפיע רק על תנועות ועל הזמנות שהתקבלו.</p>

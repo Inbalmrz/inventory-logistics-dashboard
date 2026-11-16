@@ -2,6 +2,8 @@
 
 **כל הנתונים במערכת הומצאו לצורך הדגמה.** הם נשמרים ב-Airtable והדאשבורד קורא אותם משם, לא מקובץ סטטי.
 
+כל הסכומים במערכת, בשתי הגרסאות, מוצגים בדולר ארה״ב ($).
+
 ## ארכיטקטורה
 
 ```
@@ -39,7 +41,7 @@ Airtable (base "מלאי ולוגיסטיקה") --REST API--> src/sources/airtab
    ```
    DIGIKEY_CLIENT_ID=... DIGIKEY_CLIENT_SECRET=... AIRTABLE_TOKEN=pat... AIRTABLE_BASE_ID=appHZ3j17mjTXiMP6 node tools/seed-airtable.js --digikey
    ```
-   המחירים של Digi-Key בדולר. הם נטענים בלי המרה, וגרסת Digi-Key מציגה את כל הסכומים בדולר ($).
+   המחירים של Digi-Key בדולר, והם נטענים בלי המרה.
 3. פותחים `http://localhost:8765/digikey.html`. הטוקן של Airtable צריך גישה גם ל-base הזה.
 
 ## אבטחה

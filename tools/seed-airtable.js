@@ -9,7 +9,7 @@
 // Digi-Key Product Information API v4; stock, movements and purchase orders are still simulated around it:
 //   DIGIKEY_CLIENT_ID=... DIGIKEY_CLIENT_SECRET=... AIRTABLE_TOKEN=pat... AIRTABLE_BASE_ID=app... node tools/seed-airtable.js --digikey
 // The Digi-Key credentials are used only by this script, never by the browser.
-// Digi-Key prices are in USD and are loaded as-is; the dashboard shows this base in dollars (meta.currency).
+// Digi-Key prices are in USD and are loaded as-is. The dashboard shows every amount in dollars.
 //
 // The token needs the scopes data.records:read, data.records:write and schema.bases:read on this base.
 'use strict';
@@ -143,7 +143,7 @@ async function digikeyCatalog() {
   const tables = {
     meta: [
       ['asOf', data.meta.asOf], ['historyStart', data.meta.historyStart], ['lastUpdated', new Date().toISOString()],
-      ['label', digikey ? 'קטלוג Digi-Key' : data.meta.label], ['seed', String(data.meta.seed)], ['isDemo', digikey ? 'false' : 'true'], ['profile', digikey ? 'digikey' : full ? 'full' : 'light'], ['currency', digikey ? 'USD' : 'ILS'],
+      ['label', digikey ? 'קטלוג Digi-Key' : data.meta.label], ['seed', String(data.meta.seed)], ['isDemo', digikey ? 'false' : 'true'], ['profile', digikey ? 'digikey' : full ? 'full' : 'light'],
       ...(digikey ? [['note', 'המק״טים, השמות, המחירים, היצרנים וזמני האספקה של היצרנים הם נתונים אמיתיים מ-Digi-Key. המלאי, התנועות וההזמנות מומצאים בסימולציה. המחירים והשווי מוצגים בדולר ארה״ב, כפי שהתקבלו מ-Digi-Key, בלי המרה.']] : []),
     ].map(([key, value]) => ({ key, value })),
     warehouses: data.warehouses,

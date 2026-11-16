@@ -17,9 +17,8 @@ window.App = { sources: {}, ui: {} };
     return App.dayStr(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / DAY_MS);
   };
 
-  // Currency of the loaded dataset. Set once by app.js from meta.currency: 'ILS' (demo data) or 'USD' (Digi-Key catalog).
-  App.currency = { code: 'ILS', symbol: '₪' };
-  App.setCurrency = (code) => { App.currency = code === 'USD' ? { code: 'USD', symbol: '$' } : { code: 'ILS', symbol: '₪' }; };
+  // The whole model is in one currency: US dollars. Digi-Key prices arrive in USD, and the invented demo data uses the same unit.
+  App.currency = { code: 'USD', symbol: '$' };
   const cur = () => App.currency.symbol;
 
   App.fmt = {
